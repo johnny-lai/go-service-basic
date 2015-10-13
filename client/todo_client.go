@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/benschw/go-todo/api"
+	"go-service-basic/api"
 	"log"
 	"strconv"
 )

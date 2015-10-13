@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/benschw/go-todo/api"
+	"go-service-basic/api"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"

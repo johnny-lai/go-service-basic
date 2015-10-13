@@ -1,8 +1,8 @@
 package main
 
 import (
+	"client"
 	"fmt"
-	"github.com/benschw/go-todo/client"
 	"log"
 	"testing"
 )

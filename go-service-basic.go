@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
-	"github.com/benschw/go-todo/service"
 	"github.com/codegangsta/cli"
+	"go-service-basic/service"
 	"gopkg.in/yaml.v1"
 	"io/ioutil"
 	"log"
