@@ -1,13 +1,12 @@
+ROOT_PATH = $(realpath .)
+BUILD_PATH = $(ROOT_PATH)/build
+
 default: build
 
 clean:
-	rm -f cmd/server/server
-	rm -f cmd/todo/todo
+	rm -f $(BUILD_PATH)/*
 
 build:
-	cd cmd/server; \
-	go build
-	cd cmd/todo; \
 	go build
 
 deps:
@@ -22,3 +21,10 @@ test:
 	pid=$$!; \
 	go test; \
 	kill $$pid
+
+$(BUILD_PATH)/go-service-basic:
+	mkdir -p `dirname $@`
+	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $@ .
+
+deploy: clean $(BUILD_PATH)/go-service-basic
+	docker build -t go-service-basic .
