@@ -1,29 +1,71 @@
-## REST Microservice in Go for Gin
+# A Basic Go Microservice
 
-Example (seed) project for microservices in go using the [Gin](http://gin-gonic.github.io/gin/) web framework.
+An example (seed) project for microservices in go using the [Gin](http://gin-gonic.github.io/gin/) web framework.
 
+Based on [benschw/go-todo](https://github.com/benschw/go-todo).
 
-See the [blog post](http://txt.fliglio.com/2014/07/restful-microservices-in-go-with-gin/) for a walk through.
+## Development
 
-### Hacking
+### Pre-requisites
 
-#### Build Service
+#### Prepare your machine for docker
+
+1. Install docker
+  ```
+  $ brew install docker
+  ```
+  
+2. Install docker-machine
+  ```
+  $ brew install docker-machine
+  ```
+  
+3. Create a default docker VM called `default`
+  ```
+  $ docker-machine create --driver=virtualbox default
+  ```
+  
+4. Add the following to your startup script so that you run `default`
+  ```
+  eval "$(docker-machine env default)"
+  ```
+
+### Install go development tools
+
+1. Install go
+  ```
+  $ brew install go
+  ```
+  
+2. Install glide
+  ```
+  $ brew install glide
+  ```
+  
+3. Install all dependencies
+  ```
+  $ glide install --import
+  ```
+
+### Build
 	
-	make build
+  ```
+  make
+  ```
+	
+### Test
 
-#### Build the Database
+  ```
+  make test
+  ```
+  
+    
+## Production
 
-	mysql -u root -p -e 'Create Database Todo;'
+### Pre-requisites
 
-	./cmd/server/server --config config.yaml migratedb
+1. `docker` should be pre-installed
+	
+### Build
 
-There's also a `make` target: `make migrate`, but you still need to create the database by hand.
-
-#### Run the Service
-
-	./cmd/server/server --config config.yaml server
-
-#### Testing
-The tests leverage a running instance of the server. This is automated with the `Make` target
-
-	make test
+Run `make deploy`. The image will be named `go-service-basic`
