@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/codegangsta/cli"
-	"go-service-basic/service"
+	"go-service-basic/core/service"
 	"gopkg.in/yaml.v1"
 	"io/ioutil"
 	"log"

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go-service-basic/api"
+	"go-service-basic/core/api"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"log"
