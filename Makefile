@@ -24,3 +24,5 @@ test:
 
 deploy: clean
 	docker build -t go-service-basic .
+
+.PHONY: default clean build deps migrate test deploy
