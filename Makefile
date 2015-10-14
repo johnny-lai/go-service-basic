@@ -22,9 +22,5 @@ test:
 	go test; \
 	kill $$pid
 
-$(BUILD_PATH)/go-service-basic:
-	mkdir -p `dirname $@`
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $@ .
-
-deploy: clean $(BUILD_PATH)/go-service-basic
+deploy: clean
 	docker build -t go-service-basic .
