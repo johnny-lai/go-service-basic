@@ -1,17 +1,14 @@
 ROOT_PATH = $(realpath .)
-BUILD_PATH = $(ROOT_PATH)/build
 
 default: build
 
 clean:
-	rm -f $(BUILD_PATH)/*
 
 build:
 	go build
 
 deps:
-	cd cmd/server; \
-	go get
+	glide install --import
 
 migrate:
 	./cmd/server/server --config config.yaml migratedb
