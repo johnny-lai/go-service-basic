@@ -18,10 +18,10 @@ func ExpandString(value string) string {
 	switch value[0] {
 	case '$':
 		// Expand as an environment variable
-		return os.Getenv(value[1 : len(value)])
+		return os.Getenv(value[1:len(value)])
 	case '\\':
 		// Unescaped string
-		return value[1 : len(value)]
+		return value[1:len(value)]
 	default:
 		return value
 	}
@@ -60,7 +60,7 @@ func main() {
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name: "config, c",
+			Name:  "config, c",
 			Value: "config.yaml",
 			Usage: "config file to use",
 		},
@@ -79,7 +79,7 @@ func main() {
 
 				d, err := yaml.Marshal(&cfg)
 				if err != nil {
-								log.Fatalf("error: %v", err)
+					log.Fatalf("error: %v", err)
 				}
 				fmt.Printf(string(d))
 			},
