@@ -1,5 +1,5 @@
 svchost: :8080
 dbuser: root
-dbpassword: ""
-dbhost: localhost
+dbpassword: $DB_ENV_MYSQL_ROOT_PASSWORD
+dbhost: $DB_PORT_3306_TCP_ADDR
 dbname: Todo
