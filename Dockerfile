@@ -2,26 +2,17 @@
 
 # Start from a Debian image with the latest version of Go installed
 # and a workspace (GOPATH) configured at /go.
-# golang-glide is golang image with glide installed
-FROM golang-glide
+FROM golang
 
 # Copy configuration
-ADD ./config/production.yaml /opt/go-service-basic/production.yaml
+COPY ./config/production.yaml /opt/go-service-basic/production.yaml
 
-# Copy the local package files to the container's workspace.
-ADD . /go/src/go-service-basic
+# Copy executables
+COPY ./tmp/dist/go-service-basic /go/bin/go-service-basic
 
-ENV GO15VENDOREXPERIMENT 1
-
-# Run glide install if the vendor directory does not exist
-# This is to make it faster to build images during development
-# When building production images, the vendor directory should not exist
-RUN cd /go/src/go-service-basic && if [ ! -d vendor ]; then glide install --import; fi
-
-# Build the go-service-basic command inside the container.
-# (You may fetch or manage dependencies here,
-# either manually or with a tool like "godep".)
-RUN go install go-service-basic
-
+# Entrypoint
 ENTRYPOINT ["/go/bin/go-service-basic", "-c", "/opt/go-service-basic/production.yaml"]
 CMD ["server"]
+
+# Service listens on port 8080
+EXPOSE 8080

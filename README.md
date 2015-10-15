@@ -82,6 +82,8 @@ Run `make deploy`. The image will be named `go-service-basic`
 
 ### Run locally
 
+[The Go Blog](https://blog.golang.org/docker) has useful information.
+
 To create a MySQL db server container
 ```
 $ docker pull mysql:5.5
@@ -96,6 +98,16 @@ $ docker exec -it db mysqladmin -u root -p create Todo
 To start the microservice and use the db server
 ```
 $ docker run --link db go-service-basic
+```
+
+To start the microservice in production,
+```
+$ docker run --link db --name go-service-basic -d -e GIN_MODE=release go-service-basic
+```
+
+To sop the microservice
+```
+$ docker stop go-service-basic
 ```
 
 To override the default configuration, you would mount your new configuration to
