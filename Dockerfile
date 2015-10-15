@@ -23,5 +23,5 @@ RUN cd /go/src/go-service-basic && if [ ! -d vendor ]; then glide install --impo
 # either manually or with a tool like "godep".)
 RUN go install go-service-basic
 
-ENTRYPOINT ["/go/bin/go-service-basic"]
-CMD ["-c", "/opt/go-service-basic/production.yaml", "server"]
+ENTRYPOINT ["/go/bin/go-service-basic", "-c", "/opt/go-service-basic/production.yaml"]
+CMD ["server"]

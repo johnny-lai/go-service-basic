@@ -101,7 +101,7 @@ $ docker run --link db go-service-basic
 To override the default configuration, you would mount your new configuration to
 `/opt/go-service-basic`.
 ```
-docker run -v `pwd`/config:/opt/go-service-basic --link db go-service-basic server
+docker run -v `pwd`/config:/opt/go-service-basic --link db go-service-basic
 ```
 
 To get the configuration that it is using
