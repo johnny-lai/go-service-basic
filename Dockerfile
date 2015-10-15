@@ -6,7 +6,7 @@
 FROM golang-glide
 
 # Copy configuration
-ADD ./config/production.yaml /etc/go-service-basic.yaml
+ADD ./config/production.yaml /opt/go-service-basic/production.yaml
 
 # Copy the local package files to the container's workspace.
 ADD . /go/src/go-service-basic
@@ -24,4 +24,4 @@ RUN cd /go/src/go-service-basic && if [ ! -d vendor ]; then glide install --impo
 RUN go install go-service-basic
 
 ENTRYPOINT ["/go/bin/go-service-basic"]
-CMD ["-c", "/etc/go-service-basic.yaml"]
+CMD ["-c", "/opt/go-service-basic/production.yaml", "server"]
