@@ -36,7 +36,7 @@ dist:
 	           -v $(ROOT_PATH):$(ROOT_PATH_D) \
 	           -w $(ROOT_PATH_D) \
 	           -e OUTPUT_PATH=$(OUTPUT_PATH_D) \
-	           golang-glide \
+	           golang \
 	           make clean build
 	docker build -t go-service-basic .
 
