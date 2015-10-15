@@ -1,10 +1,10 @@
 package service
 
 import (
-	"go-service-basic/core/api"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"go-service-basic/core/model"
 )
 
 type Config struct {
@@ -34,6 +34,7 @@ func (s *TodoService) Migrate(cfg Config) error {
 	db.AutoMigrate(&api.Todo{})
 	return nil
 }
+
 func (s *TodoService) Run(cfg Config) error {
 	db, err := s.getDb(cfg)
 	if err != nil {

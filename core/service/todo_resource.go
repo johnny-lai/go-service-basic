@@ -1,9 +1,9 @@
 package service
 
 import (
-	"go-service-basic/core/api"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"go-service-basic/core/model"
 	"log"
 	"strconv"
 	"time"
