@@ -25,7 +25,7 @@ deps: $(GLIDE)
 migrate:
 	./cmd/server/server --config config.yaml migratedb
 
-test:
+test: build
 	GO15VENDOREXPERIMENT=1 go test $(GO_PACKAGES)
 
 fmt:
@@ -37,7 +37,7 @@ dist:
 	           -w $(ROOT_PATH_D) \
 	           -e OUTPUT_PATH=$(OUTPUT_PATH_D) \
 	           golang \
-	           make clean build
+	           make clean build test && \
 	docker build -t go-service-basic .
 
 deploy: dist
