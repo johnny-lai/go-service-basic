@@ -25,7 +25,7 @@ deps: $(GLIDE)
 migrate:
 	./cmd/server/server --config config.yaml migratedb
 
-test: build
+test:
 	GO15VENDOREXPERIMENT=1 go test $(GO_PACKAGES)
 
 fmt:
@@ -37,13 +37,16 @@ dist:
 	           -w $(ROOT_PATH_D) \
 	           -e OUTPUT_PATH=$(OUTPUT_PATH_D) \
 	           golang \
-	           make clean build test && \
+	           make distclean build test && \
 	docker build -t go-service-basic .
+
+distclean: clean
+	rm -rf $(ROOT_PATH)/tmp $(ROOT_PATH)/vendor
 
 deploy: dist
 	echo '[TODO] Upload image to a docker repository'
 
-.PHONY: build clean default deploy deps migrate test
+.PHONY: build clean default deploy deps dist distclean fmt migrate test
 
 $(GLIDE):
 	go get github.com/Masterminds/glide
