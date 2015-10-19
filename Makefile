@@ -36,17 +36,19 @@ dist:
 	           -v $(ROOT_PATH):$(ROOT_PATH_D) \
 	           -w $(ROOT_PATH_D) \
 	           -e OUTPUT_PATH=$(OUTPUT_PATH_D) \
+						 -e UID=$(UID) \
+						 -e GID=$(GID) \
 	           golang \
-	           make distclean build test && \
-	docker build -t go-service-basic .
+	           make distbuild && \
+	docker build -t go-service-basic -f ./dist/Dockerfile .
 
-distclean: clean
-	rm -rf $(ROOT_PATH)/tmp $(ROOT_PATH)/vendor
+distbuild: clean build test
+	chown -R $(UID):$(GID) $(OUTPUT_PATH)
 
 deploy: dist
 	echo '[TODO] Upload image to a docker repository'
 
-.PHONY: build clean default deploy deps dist distclean fmt migrate test
+.PHONY: build clean default deploy deps dist distbuild fmt migrate test
 
 $(GLIDE):
 	go get github.com/Masterminds/glide
