@@ -11,6 +11,9 @@ import (
 	"os"
 )
 
+var version = "dev"
+var commit = "sha1"
+
 func ExpandString(value string) string {
 	if len(value) == 0 {
 		return value
@@ -56,7 +59,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "todo"
 	app.Usage = "work with the `todo` microservice"
-	app.Version = "0.0.1"
+	app.Version = fmt.Sprintf("%s (%s)", version, commit)
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{

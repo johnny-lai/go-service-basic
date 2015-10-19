@@ -1,5 +1,11 @@
 GLIDE = $(GOPATH)/bin/glide
 
+MAJOR_VERSION ?= 0
+MINOR_VERSION ?= 0
+BUILD_NUMBER ?= 0
+COMMIT ?= $(shell git log --pretty=format:'%h' -n 1)
+VERSION = $(MAJOR_VERSION).$(MINOR_VERSION).$(BUILD_NUMBER)
+
 # These are local paths
 SRCROOT ?= $(realpath .)
 BUILD_ROOT ?= $(SRCROOT)
@@ -17,7 +23,10 @@ clean:
 	rm -f $(BUILD_ROOT)/go-service-basic
 
 build: deps
-	GO15VENDOREXPERIMENT=1 go build -o $(BUILD_ROOT)/go-service-basic go-service-basic.go
+	GO15VENDOREXPERIMENT=1 go build -x \
+		-o $(BUILD_ROOT)/go-service-basic \
+		-ldflags "-X main.version=$(VERSION) -X main.commit=$(COMMIT)" \
+		go-service-basic.go
 
 deps: $(GLIDE) $(BUILD_ROOT)
 	if [ ! -d vendor ]; then $(GLIDE) install --import; fi
