@@ -1,25 +1,25 @@
 GLIDE = $(GOPATH)/bin/glide
 
 # These are local paths
-ROOT_PATH = $(realpath .)
-OUTPUT_PATH ?= $(ROOT_PATH)
+SRCROOT ?= $(realpath .)
+BUILD_ROOT ?= $(SRCROOT)
 GO_PACKAGES = go-service-basic \
               go-service-basic/core/model \
               go-service-basic/core/service
 
 # These are paths used in the docker image
-ROOT_PATH_D = /go/src/go-service-basic
-OUTPUT_PATH_D = $(ROOT_PATH_D)/tmp/dist
+SRCROOT_D = /go/src/go-service-basic
+BUILD_ROOT_D = $(SRCROOT_D)/tmp/dist
 
 default: build
 
 clean:
-	rm -f $(OUTPUT_PATH)/go-service-basic
+	rm -f $(BUILD_ROOT)/go-service-basic
 
 build: deps
-	GO15VENDOREXPERIMENT=1 go build -o $(OUTPUT_PATH)/go-service-basic go-service-basic.go
+	GO15VENDOREXPERIMENT=1 go build -o $(BUILD_ROOT)/go-service-basic go-service-basic.go
 
-deps: $(GLIDE)
+deps: $(GLIDE) $(BUILD_ROOT)
 	if [ ! -d vendor ]; then $(GLIDE) install --import; fi
 
 migrate:
@@ -33,17 +33,17 @@ fmt:
 
 dist:
 	docker run --rm \
-	           -v $(ROOT_PATH):$(ROOT_PATH_D) \
-	           -w $(ROOT_PATH_D) \
-	           -e OUTPUT_PATH=$(OUTPUT_PATH_D) \
+	           -v $(SRCROOT):$(SRCROOT_D) \
+	           -w $(SRCROOT_D) \
+	           -e BUILD_ROOT=$(BUILD_ROOT_D) \
 						 -e UID=`id -u` \
 						 -e GID=`id -g` \
 	           golang \
 	           make distbuild && \
-	docker build -f $(ROOT_PATH)/Dockerfile -t go-service-basic .
+	docker build -f $(SRCROOT)/Dockerfile -t go-service-basic .
 
 distbuild: clean build test
-	chown -R $(UID):$(GID) $(ROOT_PATH)
+	chown -R $(UID):$(GID) $(SRCROOT)
 
 deploy: dist
 	echo '[TODO] Upload image to a docker repository'
@@ -53,5 +53,5 @@ deploy: dist
 $(GLIDE):
 	go get github.com/Masterminds/glide
 
-$(OUTPUT_PATH):
+$(BUILD_ROOT):
 	mkdir -p $@
