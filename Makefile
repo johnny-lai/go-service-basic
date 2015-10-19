@@ -40,10 +40,10 @@ dist:
 						 -e GID=`id -g` \
 	           golang \
 	           make distbuild && \
-	docker build -t go-service-basic -f ./dist/Dockerfile .
+	docker build -f $(ROOT_PATH)/Dockerfile -t go-service-basic .
 
 distbuild: clean build test
-	chown -R $(UID):$(GID) $(OUTPUT_PATH)
+	chown -R $(UID):$(GID) tmp vendor
 
 deploy: dist
 	echo '[TODO] Upload image to a docker repository'
