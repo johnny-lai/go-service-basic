@@ -36,8 +36,8 @@ dist:
 	           -v $(ROOT_PATH):$(ROOT_PATH_D) \
 	           -w $(ROOT_PATH_D) \
 	           -e OUTPUT_PATH=$(OUTPUT_PATH_D) \
-						 -e UID=$(UID) \
-						 -e GID=$(GID) \
+						 -e UID=`id -u` \
+						 -e GID=`id -g` \
 	           golang \
 	           make distbuild && \
 	docker build -t go-service-basic -f ./dist/Dockerfile .
