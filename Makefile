@@ -43,7 +43,7 @@ dist:
 	docker build -f $(ROOT_PATH)/Dockerfile -t go-service-basic .
 
 distbuild: clean build test
-	chown -R $(UID):$(GID) tmp vendor
+	chown -R $(UID):$(GID) $(ROOT_PATH)
 
 deploy: dist
 	echo '[TODO] Upload image to a docker repository'
