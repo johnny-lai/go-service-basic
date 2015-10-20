@@ -40,6 +40,14 @@ test:
 fmt:
 	GO15VENDOREXPERIMENT=1 go fmt $(GO_PACKAGES)
 
+devconsole:
+	docker run --rm \
+	           -v $(SRCROOT):$(SRCROOT_D) \
+	           -w $(SRCROOT_D) \
+	           -e GO15VENDOREXPERIMENT=1 \
+	           -it \
+	           johnnylai/golang-dev
+
 dist:
 	docker run --rm \
 	           -v $(SRCROOT):$(SRCROOT_D) \
@@ -47,7 +55,7 @@ dist:
 	           -e BUILD_ROOT=$(BUILD_ROOT_D) \
 						 -e UID=`id -u` \
 						 -e GID=`id -g` \
-	           golang \
+	           johnnylai/golang-dev \
 	           make distbuild && \
 	docker build -f $(SRCROOT)/Dockerfile -t go-service-basic .
 
