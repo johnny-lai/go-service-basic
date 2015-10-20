@@ -53,6 +53,7 @@ dist:
 	           -v $(SRCROOT):$(SRCROOT_D) \
 	           -w $(SRCROOT_D) \
 	           -e BUILD_ROOT=$(BUILD_ROOT_D) \
+	           -e BUILD_NUMBER=$(BUILD_NUMBER) \
 	           -e UID=`id -u` \
 	           -e GID=`id -g` \
 	           johnnylai/golang-dev \
