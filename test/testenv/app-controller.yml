@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: go-service-basic
+  labels:
+    name: go-service-basic
+    app: go-service-basic
+spec:
+  replicas: 1
+  selector:
+    name: go-service-basic
+  template:
+    metadata:
+      labels:
+        name: go-service-basic
+    spec:
+      containers:
+      - name: app
+        image: johnnylai/go-service-basic
+        env:
+        - name: DB_ENV_MYSQL_ROOT_PASSWORD
+          value: whatever
+        ports:
+        - containerPort: 8080
