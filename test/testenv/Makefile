@@ -13,7 +13,7 @@ testenv-start:
 	for n in $(SRCROOT)/*.yml; do \
 		cat $$n | $(KUBECTL) create -f - ; \
 	done
-	while $(KUBECTL) get pods -l name=go-service-basic -o json | jq ".items[0].status.containerStatuses[0].ready != true" | grep true; do sleep 1; done
+	$(RUN_IN_DEV) wait-for-pod.sh go-service-basic
 
 testenv-stop:
 	docker run --rm -i --net=host johnnylai/golang-dev kubectl delete all -lapp=go-service-basic
