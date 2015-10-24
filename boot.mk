@@ -28,7 +28,7 @@ build: deps
 		$(APP_NAME).go
 
 deps: $(GLIDE) $(BUILD_ROOT)
-	if [ ! -d vendor ]; then $(GLIDE) install --import; fi
+	if [ ! -d vendor ]; then $(GLIDE) update; fi
 
 migrate:
 	./cmd/server/server --config config.yaml migratedb
