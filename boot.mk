@@ -56,9 +56,9 @@ disttest:
 	cd test/testenv && make restart
 	docker run --rm --net=host \
 	           -v $(SRCROOT):$(SRCROOT_D) \
- 	           -w $(SRCROOT_D) \
+ 	           -w $(SRCROOT_D)/test \
 	           johnnylai/golang-dev \
-	           bash -c cd test && make test
+	           make test
 
 deploy: dist disttest
 	docker push $(APP_DOCKER_LABEL)
