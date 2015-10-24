@@ -47,6 +47,11 @@ Based on [benschw/go-todo](https://github.com/benschw/go-todo).
   $ glide install --import
   ```
 
+4. Install jq (JSON parser for the command-line)
+  ```
+	$ brew install jq
+	```
+
 ### Build
 	
   ```

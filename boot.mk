@@ -18,7 +18,8 @@ BUILD_ROOT_D = $(SRCROOT_D)/tmp/dist
 default: build
 
 clean:
-	rm -f $(BUILD_ROOT)/go-service-basic
+	rm -f $(BUILD_ROOT)/$(APP_NAME)
+	rm -rf tmp
 
 build: deps
 	GO15VENDOREXPERIMENT=1 go build \
@@ -46,10 +47,18 @@ devconsole:
 	           -it \
 	           johnnylai/golang-dev
 
-dist: image-dist
+dist: image-dist image-testdb
 
 distbuild: clean build test
 	chown -R $(UID):$(GID) $(SRCROOT)
+
+disttest:
+	cd test/testenv && make restart
+	docker run --rm --net=host \
+	           -v $(SRCROOT):$(SRCROOT_D) \
+ 	           -w $(SRCROOT_D) \
+	           johnnylai/golang-dev \
+	           bash -c cd test && make test
 
 deploy: dist
 	docker push $(APP_DOCKER_LABEL)
@@ -57,7 +66,7 @@ deploy: dist
 .PHONY: build clean default deploy deps dist distbuild fmt migrate test
 
 image-testdb:
-	docker build -f $(DOCKER_ROOT)/testdb/Dockerfile -t $(APP_DOCKER_LABEL) .
+	docker build -f $(DOCKER_ROOT)/testdb/Dockerfile -t $(APP_DOCKER_LABEL)-testdb .
 
 image-dist: tmp/dist/$(APP_NAME)
 	docker build -f $(DOCKER_ROOT)/dist/Dockerfile -t $(APP_DOCKER_LABEL) .

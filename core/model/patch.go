@@ -1,4 +1,4 @@
-package api
+package model
 
 /**
  * on patching: http://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/

@@ -1,4 +1,4 @@
-package api
+package model
 
 type Todo struct {
 	Id          int32  `json:"id"`

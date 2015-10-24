@@ -31,7 +31,7 @@ func (s *TodoService) Migrate(cfg Config) error {
 	}
 	db.SingularTable(true)
 
-	db.AutoMigrate(&api.Todo{})
+	db.AutoMigrate(&model.Todo{})
 	return nil
 }
 

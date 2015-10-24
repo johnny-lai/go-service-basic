@@ -14,13 +14,13 @@ type TodoResource struct {
 }
 
 func (tr *TodoResource) CreateTodo(c *gin.Context) {
-	var todo api.Todo
+	var todo model.Todo
 
 	if c.Bind(&todo) == nil {
-		c.JSON(400, api.NewError("problem decoding body"))
+		c.JSON(400, model.NewError("problem decoding body"))
 		return
 	}
-	todo.Status = api.TodoStatus
+	todo.Status = model.TodoStatus
 	todo.Created = int32(time.Now().Unix())
 
 	tr.db.Save(&todo)
@@ -29,7 +29,7 @@ func (tr *TodoResource) CreateTodo(c *gin.Context) {
 }
 
 func (tr *TodoResource) GetAllTodos(c *gin.Context) {
-	var todos []api.Todo
+	var todos []model.Todo
 
 	tr.db.Order("created desc").Find(&todos)
 
@@ -39,11 +39,11 @@ func (tr *TodoResource) GetAllTodos(c *gin.Context) {
 func (tr *TodoResource) GetTodo(c *gin.Context) {
 	id, err := tr.getId(c)
 	if err != nil {
-		c.JSON(400, api.NewError("problem decoding id sent"))
+		c.JSON(400, model.NewError("problem decoding id sent"))
 		return
 	}
 
-	var todo api.Todo
+	var todo model.Todo
 
 	if tr.db.First(&todo, id).RecordNotFound() {
 		c.JSON(404, gin.H{"error": "not found"})
@@ -55,22 +55,22 @@ func (tr *TodoResource) GetTodo(c *gin.Context) {
 func (tr *TodoResource) UpdateTodo(c *gin.Context) {
 	id, err := tr.getId(c)
 	if err != nil {
-		c.JSON(400, api.NewError("problem decoding id sent"))
+		c.JSON(400, model.NewError("problem decoding id sent"))
 		return
 	}
 
-	var todo api.Todo
+	var todo model.Todo
 
 	if c.Bind(&todo) == nil {
-		c.JSON(400, api.NewError("problem decoding body"))
+		c.JSON(400, model.NewError("problem decoding body"))
 		return
 	}
 	todo.Id = int32(id)
 
-	var existing api.Todo
+	var existing model.Todo
 
 	if tr.db.First(&existing, id).RecordNotFound() {
-		c.JSON(404, api.NewError("not found"))
+		c.JSON(404, model.NewError("not found"))
 	} else {
 		tr.db.Save(&todo)
 		c.JSON(200, todo)
@@ -81,24 +81,24 @@ func (tr *TodoResource) UpdateTodo(c *gin.Context) {
 func (tr *TodoResource) PatchTodo(c *gin.Context) {
 	id, err := tr.getId(c)
 	if err != nil {
-		c.JSON(400, api.NewError("problem decoding id sent"))
+		c.JSON(400, model.NewError("problem decoding id sent"))
 		return
 	}
 
 	// this is a hack because Gin falsely claims my unmarshalled obj is invalid.
 	// recovering from the panic and using my object that already has the json body bound to it.
-	var json []api.Patch
+	var json []model.Patch
 	defer func() {
 		if r := recover(); r != nil {
 			if json[0].Op != "replace" && json[0].Path != "/status" {
-				c.JSON(400, api.NewError("PATCH support is limited and can only replace the /status path"))
+				c.JSON(400, model.NewError("PATCH support is limited and can only replace the /status path"))
 				return
 			}
 
-			var todo api.Todo
+			var todo model.Todo
 
 			if tr.db.First(&todo, id).RecordNotFound() {
-				c.JSON(404, api.NewError("not found"))
+				c.JSON(404, model.NewError("not found"))
 			} else {
 				todo.Status = json[0].Value
 
@@ -113,14 +113,14 @@ func (tr *TodoResource) PatchTodo(c *gin.Context) {
 func (tr *TodoResource) DeleteTodo(c *gin.Context) {
 	id, err := tr.getId(c)
 	if err != nil {
-		c.JSON(400, api.NewError("problem decoding id sent"))
+		c.JSON(400, model.NewError("problem decoding id sent"))
 		return
 	}
 
-	var todo api.Todo
+	var todo model.Todo
 
 	if tr.db.First(&todo, id).RecordNotFound() {
-		c.JSON(404, api.NewError("not found"))
+		c.JSON(404, model.NewError("not found"))
 	} else {
 		tr.db.Delete(&todo)
 		c.Data(204, "application/json", make([]byte, 0))
