@@ -60,7 +60,7 @@ disttest:
 	           johnnylai/golang-dev \
 	           bash -c cd test && make test
 
-deploy: dist
+deploy: dist disttest
 	docker push $(APP_DOCKER_LABEL)
 
 .PHONY: build clean default deploy deps dist distbuild fmt migrate test
