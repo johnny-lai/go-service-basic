@@ -4,6 +4,9 @@ PORT ?= $(shell kubectl get svc go-service-basic -o json | jq '.spec.ports[0].ta
 test:
 	TEST_HOST="http://$(SERVER):$(PORT)" go test go-service-basic/itest
 
+bench:
+	TEST_HOST="http://$(SERVER):$(PORT)" go test -bench=. go-service-basic/itest
+
 testenv-stop:
 	cd testenv && make stop
 

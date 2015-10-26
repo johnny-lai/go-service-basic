@@ -40,14 +40,17 @@ utest: deps
 	TEST_CONFIG_YML=$(TEST_CONFIG_YML) GO15VENDOREXPERIMENT=1 go test $(APP_GO_PACKAGES)
 
 itest: deps
-	cd itest/env && make restart
 	cd itest && make test
+
+itest-env-restart:
+	cd itest/env && make restart
 
 fmt:
 	GO15VENDOREXPERIMENT=1 go fmt $(APP_GO_PACKAGES)
 
 devconsole:
 	docker run --rm \
+	           --net=host \
 	           -v $(SRCROOT):$(SRCROOT_D) \
 	           -w $(SRCROOT_D) \
 	           -e GO15VENDOREXPERIMENT=1 \
@@ -60,12 +63,18 @@ distbuild: clean build
 	chown -R $(UID):$(GID) $(SRCROOT)
 
 distitest:
-	cd itest/env && make restart
 	docker run --rm --net=host \
 	           -v $(SRCROOT):$(SRCROOT_D) \
  	           -w $(SRCROOT_D)/itest \
 	           johnnylai/golang-dev \
 	           make test
+
+distibench:
+	docker run --rm --net=host \
+	           -v $(SRCROOT):$(SRCROOT_D) \
+ 	           -w $(SRCROOT_D)/itest \
+	           johnnylai/golang-dev \
+	           make bench
 
 distutest:
 	-docker rm -f go-service-basic-testdb
@@ -79,7 +88,7 @@ distutest:
 	           johnnylai/golang-dev \
 	           make utest
 
-deploy: distutest dist distitest
+deploy: distutest dist itest-env-restart distitest
 	docker push $(APP_DOCKER_LABEL)
 
 .PHONY: build clean default deploy deps dist distbuild fmt migrate itest utest
