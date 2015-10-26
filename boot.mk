@@ -36,10 +36,10 @@ deps: $(GLIDE) $(BUILD_ROOT)
 migrate:
 	./cmd/server/server --config config.yaml migratedb
 
-utest:
+utest: deps
 	TEST_CONFIG_YML=$(TEST_CONFIG_YML) GO15VENDOREXPERIMENT=1 go test $(APP_GO_PACKAGES)
 
-itest:
+itest: deps
 	cd itest/env && make restart
 	cd itest && make test
 
@@ -56,7 +56,7 @@ devconsole:
 
 dist: image-dist image-testdb
 
-distbuild: clean build test
+distbuild: clean build
 	chown -R $(UID):$(GID) $(SRCROOT)
 
 distitest:
