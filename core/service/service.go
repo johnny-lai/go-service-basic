@@ -35,7 +35,7 @@ func (s *TodoService) Migrate(cfg Config) error {
 	return nil
 }
 
-func (s *TodoService) Run(cfg Config) error {
+func (s *TodoService) Build(cfg Config, r *gin.Engine) error {
 	db, err := s.getDb(cfg)
 	if err != nil {
 		return err
@@ -44,16 +44,12 @@ func (s *TodoService) Run(cfg Config) error {
 
 	todoResource := &TodoResource{db: db}
 
-	r := gin.Default()
-
 	r.GET("/todo", todoResource.GetAllTodos)
 	r.GET("/todo/:id", todoResource.GetTodo)
 	r.POST("/todo", todoResource.CreateTodo)
 	r.PUT("/todo/:id", todoResource.UpdateTodo)
 	r.PATCH("/todo/:id", todoResource.PatchTodo)
 	r.DELETE("/todo/:id", todoResource.DeleteTodo)
-
-	r.Run(cfg.SvcHost)
 
 	return nil
 }

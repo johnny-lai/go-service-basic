@@ -1,58 +1,17 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/gin-gonic/gin"
 	"go-service-basic/core/service"
 	"gopkg.in/yaml.v1"
-	"io/ioutil"
 	"log"
 	"os"
 )
 
 var version = "dev"
 var commit = "sha1"
-
-func ExpandString(value string) string {
-	if len(value) == 0 {
-		return value
-	}
-	switch value[0] {
-	case '$':
-		// Expand as an environment variable
-		return os.Getenv(value[1:len(value)])
-	case '\\':
-		// Unescaped string
-		return value[1:len(value)]
-	default:
-		return value
-	}
-}
-
-func getConfig(c *cli.Context) (service.Config, error) {
-	yamlPath := c.GlobalString("config")
-	config := service.Config{}
-
-	if _, err := os.Stat(yamlPath); err != nil {
-		return config, errors.New("config path not valid")
-	}
-
-	ymlData, err := ioutil.ReadFile(yamlPath)
-	if err != nil {
-		return config, err
-	}
-
-	err = yaml.Unmarshal([]byte(ymlData), &config)
-
-	config.SvcHost = ExpandString(config.SvcHost)
-	config.DbUser = ExpandString(config.DbUser)
-	config.DbPassword = ExpandString(config.DbPassword)
-	config.DbHost = ExpandString(config.DbHost)
-	config.DbName = ExpandString(config.DbName)
-
-	return config, err
-}
 
 func main() {
 
@@ -74,7 +33,7 @@ func main() {
 			Name:  "env",
 			Usage: "Print the configurations",
 			Action: func(c *cli.Context) {
-				cfg, err := getConfig(c)
+				cfg, err := service.GetConfig(c.GlobalString("config"))
 				if err != nil {
 					log.Fatal(err)
 					return
@@ -91,7 +50,7 @@ func main() {
 			Name:  "server",
 			Usage: "Run the http server",
 			Action: func(c *cli.Context) {
-				cfg, err := getConfig(c)
+				cfg, err := service.GetConfig(c.GlobalString("config"))
 				if err != nil {
 					log.Fatal(err)
 					return
@@ -99,16 +58,19 @@ func main() {
 
 				svc := service.TodoService{}
 
-				if err = svc.Run(cfg); err != nil {
+				r := gin.Default()
+				if err = svc.Build(cfg, r); err != nil {
 					log.Fatal(err)
 				}
+
+				r.Run(cfg.SvcHost)
 			},
 		},
 		{
 			Name:  "migratedb",
 			Usage: "Perform database migrations",
 			Action: func(c *cli.Context) {
-				cfg, err := getConfig(c)
+				cfg, err := service.GetConfig(c.GlobalString("config"))
 				if err != nil {
 					log.Fatal(err)
 					return

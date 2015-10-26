@@ -1,10 +1,4 @@
-# Glide YAML configuration file
-# Set this to your fully qualified package name, e.g.
-# github.com/Masterminds/foo. This should be the
-# top level package.
 package: main
-
-# Declare your project's dependencies.
 import:
   - package: github.com/codegangsta/cli
     ref:     96f1fedb28e10f2e5ad3fd4b7347101529a7ca56
@@ -22,3 +16,7 @@ import:
     ref:     ffe986aba3e6cfcded8b06615965941408891ef0
     subpackages:
       - /hstore
+  - package: github.com/onsi/ginkgo
+    ref:     39d2c24f8a92c88f7e7f4d8ec6c80d3cc8f5ac65
+  - package: github.com/onsi/gomega
+    ref:     2152b45fa28a361beba9aab0885972323a444e28

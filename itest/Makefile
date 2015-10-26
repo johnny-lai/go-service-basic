@@ -2,7 +2,7 @@ SERVER ?= $(shell kubectl get svc go-service-basic -o json | jq -r '.spec.cluste
 PORT ?= $(shell kubectl get svc go-service-basic -o json | jq '.spec.ports[0].targetPort')
 
 test:
-	TEST_HOST="http://$(SERVER):$(PORT)" go test go-service-basic/test
+	TEST_HOST="http://$(SERVER):$(PORT)" go test go-service-basic/itest
 
 testenv-stop:
 	cd testenv && make stop
