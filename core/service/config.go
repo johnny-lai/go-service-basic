@@ -7,22 +7,6 @@ import (
 	"os"
 )
 
-func ExpandString(value string) string {
-	if len(value) == 0 {
-		return value
-	}
-	switch value[0] {
-	case '$':
-		// Expand as an environment variable
-		return os.Getenv(value[1:len(value)])
-	case '\\':
-		// Unescaped string
-		return value[1:len(value)]
-	default:
-		return value
-	}
-}
-
 func GetConfig(yamlPath string) (Config, error) {
 	config := Config{}
 
@@ -37,11 +21,11 @@ func GetConfig(yamlPath string) (Config, error) {
 
 	err = yaml.Unmarshal([]byte(ymlData), &config)
 
-	config.SvcHost = ExpandString(config.SvcHost)
-	config.DbUser = ExpandString(config.DbUser)
-	config.DbPassword = ExpandString(config.DbPassword)
-	config.DbHost = ExpandString(config.DbHost)
-	config.DbName = ExpandString(config.DbName)
+	config.SvcHost = os.Expand(config.SvcHost, os.Getenv)
+	config.DbUser = os.Expand(config.DbUser, os.Getenv)
+	config.DbPassword = os.Expand(config.DbPassword, os.Getenv)
+	config.DbHost = os.Expand(config.DbHost, os.Getenv)
+	config.DbName = os.Expand(config.DbName, os.Getenv)
 
 	return config, err
 }
