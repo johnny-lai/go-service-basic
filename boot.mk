@@ -105,7 +105,7 @@ $(GLIDE):
 $(BUILD_ROOT):
 	mkdir -p $@
 
-$(PRODUCT_PATH):
+$(PRODUCT_PATH): $(wildcard *.go)
 	docker run --rm \
 	           -v $(SRCROOT):$(SRCROOT_D) \
 	           -w $(SRCROOT_D) \
