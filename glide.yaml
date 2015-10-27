@@ -1,7 +1,6 @@
 package: main
 import:
   - package: github.com/johnny-lai/bedrock
-    ref:     65b537d278a1237bca33a77a5f442878d24c90d6
   - package: github.com/go-sql-driver/mysql
     ref:     527bcd55aab2e53314f1a150922560174b493034
   - package: github.com/lib/pq
