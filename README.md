@@ -72,7 +72,7 @@ You can use (godebug)[https://github.com/mailgun/godebug] to debug the program. 
 $ go get github.com/mailgun/godebug
 $ unset GO15VENDOREXPERIMENT
 $ godep get
-$ godebug run ./go-service-basic.go -c ./config/production.yaml server 
+$ godebug run ./go-service-basic.go -c ./config/production.yml server 
 ```
     
 ## Production

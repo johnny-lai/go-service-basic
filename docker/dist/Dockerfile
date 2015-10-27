@@ -5,13 +5,13 @@
 FROM debian:jessie
 
 # Copy configuration
-COPY ./config/production.yaml /opt/go-service-basic/production.yaml
+COPY ./config/production.yml /opt/go-service-basic/production.yml
 
 # Copy executables
 COPY ./tmp/dist/go-service-basic /go/bin/go-service-basic
 
 # Entrypoint
-ENTRYPOINT ["/go/bin/go-service-basic", "-c", "/opt/go-service-basic/production.yaml"]
+ENTRYPOINT ["/go/bin/go-service-basic", "-c", "/opt/go-service-basic/production.yml"]
 CMD ["server"]
 
 # Service listens on port 8080

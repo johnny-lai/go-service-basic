@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/johnny-lai/bedrock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"log"
@@ -23,7 +24,7 @@ var _ = Describe("TodoService", func() {
 			log.Fatal("Configuration file not specified. Please set TEST_CONFIG_YML variable")
 		}
 
-		cfg, err := GetConfig(file)
+		cfg, err := bedrock.GetConfig(file)
 		if err != nil {
 			log.Fatal(err)
 		}

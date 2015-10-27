@@ -18,13 +18,18 @@ type Config struct {
 type TodoService struct {
 }
 
-func (s *TodoService) getDb(cfg Config) (gorm.DB, error) {
-	connectionString := cfg.DbUser + ":" + cfg.DbPassword + "@tcp(" + cfg.DbHost + ":3306)/" + cfg.DbName + "?charset=utf8&parseTime=True"
+func (s *TodoService) getDb(cfg map[interface{}]interface{}) (gorm.DB, error) {
+	dbUser := cfg["dbuser"].(string)
+	dbPassword := cfg["dbpassword"].(string)
+	dbHost := cfg["dbhost"].(string)
+	dbName := cfg["dbname"].(string)
+
+	connectionString := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":3306)/" + dbName + "?charset=utf8&parseTime=True"
 
 	return gorm.Open("mysql", connectionString)
 }
 
-func (s *TodoService) Migrate(cfg Config) error {
+func (s *TodoService) Migrate(cfg map[interface{}]interface{}) error {
 	db, err := s.getDb(cfg)
 	if err != nil {
 		return err
@@ -35,7 +40,7 @@ func (s *TodoService) Migrate(cfg Config) error {
 	return nil
 }
 
-func (s *TodoService) Build(cfg Config, r *gin.Engine) error {
+func (s *TodoService) Build(cfg map[interface{}]interface{}, r *gin.Engine) error {
 	db, err := s.getDb(cfg)
 	if err != nil {
 		return err

@@ -1,0 +1,3 @@
+[submodule "vendor/github.com/johnny-lai/bedrock"]
+	path = vendor/github.com/johnny-lai/bedrock
+	url = git@github.com:/johnny-lai/bedrock
