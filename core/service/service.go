@@ -16,21 +16,21 @@ type Config struct {
 }
 
 type TodoService struct {
+  config Config
 }
 
-func (s *TodoService) getDb(cfg map[interface{}]interface{}) (gorm.DB, error) {
-	dbUser := cfg["dbuser"].(string)
-	dbPassword := cfg["dbpassword"].(string)
-	dbHost := cfg["dbhost"].(string)
-	dbName := cfg["dbname"].(string)
+func (s *TodoService) Config() interface{} {
+  return &s.config
+}
 
-	connectionString := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":3306)/" + dbName + "?charset=utf8&parseTime=True"
+func (s *TodoService) getDb() (gorm.DB, error) {
+	connectionString := s.config.DbUser + ":" + s.config.DbPassword + "@tcp(" + s.config.DbHost + ":3306)/" + s.config.DbName + "?charset=utf8&parseTime=True"
 
 	return gorm.Open("mysql", connectionString)
 }
 
-func (s *TodoService) Migrate(cfg map[interface{}]interface{}) error {
-	db, err := s.getDb(cfg)
+func (s *TodoService) Migrate() error {
+	db, err := s.getDb()
 	if err != nil {
 		return err
 	}
@@ -40,8 +40,8 @@ func (s *TodoService) Migrate(cfg map[interface{}]interface{}) error {
 	return nil
 }
 
-func (s *TodoService) Build(cfg map[interface{}]interface{}, r *gin.Engine) error {
-	db, err := s.getDb(cfg)
+func (s *TodoService) Build(r *gin.Engine) error {
+	db, err := s.getDb()
 	if err != nil {
 		return err
 	}
@@ -57,4 +57,10 @@ func (s *TodoService) Build(cfg map[interface{}]interface{}, r *gin.Engine) erro
 	r.DELETE("/todo/:id", todoResource.DeleteTodo)
 
 	return nil
+}
+
+func (s *TodoService) Run(r *gin.Engine) error {
+  r.Run(s.config.SvcHost)
+
+  return nil
 }
