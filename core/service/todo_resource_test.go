@@ -24,16 +24,16 @@ var _ = Describe("TodoService", func() {
 			log.Fatal("Configuration file not specified. Please set TEST_CONFIG_YML variable")
 		}
 
-		cfg, err := bedrock.GetConfig(file)
-		if err != nil {
-			log.Fatal(err)
-		}
-
 		gin.SetMode(gin.TestMode)
 		r = gin.New()
 
 		svc = TodoService{}
-		if err = svc.Build(cfg, r); err != nil {
+
+    if err := bedrock.ReadConfig(file, svc.Config()); err != nil {
+      log.Fatal(err)
+    }
+
+		if err := svc.Build(r); err != nil {
 			log.Fatal(err)
 		}
 	})
