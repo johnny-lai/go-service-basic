@@ -6,10 +6,11 @@ import (
 	"os"
 )
 
-var version = "dev"
-var commit = "sha1"
+var version = "unset"
 
 func main() {
 	app := bedrock.NewApp(&service.TodoService{})
+	app.Name = "go-service-basic"
+	app.Version = version
 	app.Run(os.Args)
 }
