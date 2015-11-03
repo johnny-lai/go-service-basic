@@ -14,11 +14,19 @@ spec:
       labels:
         name: go-service-basic
     spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: go-service-basic-db-secrets
       containers:
       - name: app
         image: johnnylai/go-service-basic
         env:
-        - name: DB_ENV_MYSQL_ROOT_PASSWORD
-          value: whatever
+        - name: GIN_MODE
+          value: release
+        volumeMounts:
+        - name: secret-volume
+          mountPath: "/etc/secrets"
+          readOnly: true
         ports:
         - containerPort: 8080
