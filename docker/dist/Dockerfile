@@ -2,7 +2,7 @@
 
 # Start from a Debian image with the latest version of Go installed
 # and a workspace (GOPATH) configured at /go.
-FROM debian:jessie
+FROM scratch
 
 # Copy configuration
 COPY ./config/production.yml /opt/go-service-basic/production.yml
