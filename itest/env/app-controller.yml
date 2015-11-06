@@ -1,26 +1,26 @@
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: go-service-basic
+  name: ${PO_APP_NAME}
   labels:
-    name: go-service-basic
-    app: go-service-basic
+    name: ${PO_APP_NAME}
+    app: ${APP_NAME}
 spec:
   replicas: 1
   selector:
-    name: go-service-basic
+    name: ${PO_APP_NAME}
   template:
     metadata:
       labels:
-        name: go-service-basic
+        name: ${PO_APP_NAME}
     spec:
       volumes:
       - name: db-secrets-volume
         secret:
-          secretName: go-service-basic-db-secrets
+          secretName: ${SECRET_DB_NAME}
       containers:
       - name: app
-        image: johnnylai/go-service-basic
+        image: ${PO_APP_IMAGE}
         env:
         - name: GIN_MODE
           value: release

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-service-basic
+  name: ${SVC_APP_NAME}
   labels:
-    name: go-service-basic
-    app: go-service-basic
+    name: ${SVC_APP_NAME}
+    app: ${APP_NAME}
 spec:
   # if your cluster supports it, uncomment the following to automatically create
   # an external load-balanced IP for the frontend service.
@@ -16,4 +16,4 @@ spec:
       targetPort: 8080
       protocol: TCP
   selector:
-    name: go-service-basic
+    name: ${PO_APP_NAME}
