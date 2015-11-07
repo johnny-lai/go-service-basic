@@ -1,36 +1,36 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
+	"github.com/johnny-lai/bedrock"
 	"go-service-basic/core/model"
 )
 
 type Config struct {
-	SvcHost    string
-	DbUser     string
-	DbPassword string
-	DbHost     string
-	DbName     string
+	SvcHost string
 }
 
 type TodoService struct {
-  config Config
+	dbsvc  bedrock.GormService
+	config Config
 }
 
-func (s *TodoService) Config() interface{} {
-  return &s.config
+func (s *TodoService) Configure(app *bedrock.Application) error {
+	err := s.dbsvc.Configure(app)
+	if err != nil {
+		return err
+	}
+
+	err = app.BindConfig(&s.config)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (s *TodoService) getDb() (gorm.DB, error) {
-	connectionString := s.config.DbUser + ":" + s.config.DbPassword + "@tcp(" + s.config.DbHost + ":3306)/" + s.config.DbName + "?charset=utf8&parseTime=True"
-
-	return gorm.Open("mysql", connectionString)
-}
-
-func (s *TodoService) Migrate() error {
-	db, err := s.getDb()
+func (s *TodoService) Migrate(app *bedrock.Application) error {
+	db, err := s.dbsvc.Db()
 	if err != nil {
 		return err
 	}
@@ -40,8 +40,8 @@ func (s *TodoService) Migrate() error {
 	return nil
 }
 
-func (s *TodoService) Build(r *gin.Engine) error {
-	db, err := s.getDb()
+func (s *TodoService) Build(app *bedrock.Application) error {
+	db, err := s.dbsvc.Db()
 	if err != nil {
 		return err
 	}
@@ -49,18 +49,20 @@ func (s *TodoService) Build(r *gin.Engine) error {
 
 	todoResource := &TodoResource{db: db}
 
+	r := app.Engine
 	r.GET("/todo", todoResource.GetAllTodos)
 	r.GET("/todo/:id", todoResource.GetTodo)
 	r.POST("/todo", todoResource.CreateTodo)
 	r.PUT("/todo/:id", todoResource.UpdateTodo)
 	r.PATCH("/todo/:id", todoResource.PatchTodo)
 	r.DELETE("/todo/:id", todoResource.DeleteTodo)
+	r.GET("/health", s.dbsvc.HealthHandler(app))
 
 	return nil
 }
 
-func (s *TodoService) Run(r *gin.Engine) error {
-  r.Run(s.config.SvcHost)
+func (s *TodoService) Run(app *bedrock.Application) error {
+	app.Engine.Run(s.config.SvcHost)
 
-  return nil
+	return nil
 }

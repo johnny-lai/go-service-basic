@@ -23,7 +23,7 @@ spec:
         image: ${PO_APP_IMAGE}
         env:
         - name: GIN_MODE
-          value: release
+          value: debug
         - name: DB_ENV_MYSQL_ROOT_PASSWORD
           value: whatever
         volumeMounts:

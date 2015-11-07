@@ -14,26 +14,33 @@ import (
 
 var _ = Describe("TodoService", func() {
 	var (
-		r   *gin.Engine
+		app *bedrock.Application
 		svc TodoService
 	)
 
 	BeforeEach(func() {
+		gin.SetMode(gin.TestMode)
+
 		file := os.Getenv("TEST_CONFIG_YML")
 		if file == "" {
 			log.Fatal("Configuration file not specified. Please set TEST_CONFIG_YML variable")
 		}
 
-		gin.SetMode(gin.TestMode)
-		r = gin.New()
+		app = new(bedrock.Application)
+		app.Engine = gin.New()
+
+		err := app.ReadConfigFile(file)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		svc = TodoService{}
 
-    if err := bedrock.ReadConfig(file, svc.Config()); err != nil {
-      log.Fatal(err)
-    }
+		if err := svc.Configure(app); err != nil {
+			log.Fatal(err)
+		}
 
-		if err := svc.Build(r); err != nil {
+		if err := svc.Build(app); err != nil {
 			log.Fatal(err)
 		}
 	})
@@ -42,7 +49,7 @@ var _ = Describe("TodoService", func() {
 		It("should not raise an error", func() {
 			request, _ := http.NewRequest("GET", "/todo", nil)
 			response := httptest.NewRecorder()
-			r.ServeHTTP(response, request)
+			app.Engine.ServeHTTP(response, request)
 			Expect(response.Code).To(Equal(http.StatusOK))
 		})
 	})
