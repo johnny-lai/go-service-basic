@@ -1,10 +1,10 @@
 package service
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"go-service-basic/core/model"
-	"log"
 	"strconv"
 	"time"
 )
