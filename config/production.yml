@@ -1,5 +1,9 @@
 svchost: :8080
-dbuser: root
-dbpassword: $DB_ENV_MYSQL_ROOT_PASSWORD
-dbhost: $GO_SERVICE_BASIC_DB_PORT_3306_TCP_ADDR
-dbname: todo
+db:
+  user: root
+  password: {{.Cat "/db/secrets"}}
+  host: {{.Env "GO_SERVICE_BASIC_DB_PORT_3306_TCP_ADDR"}}
+  database: todo
+airbrake:
+  projectid: 1234
+  projectkey: test

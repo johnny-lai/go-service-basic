@@ -11,18 +11,21 @@ type Config struct {
 }
 
 type TodoService struct {
+  airbrake bedrock.AirbrakeService
 	dbsvc  bedrock.GormService
 	config Config
 }
 
 func (s *TodoService) Configure(app *bedrock.Application) error {
-	err := s.dbsvc.Configure(app)
-	if err != nil {
+	if err := s.airbrake.Configure(app); err != nil {
 		return err
 	}
 
-	err = app.BindConfig(&s.config)
-	if err != nil {
+	if err := s.dbsvc.Configure(app); err != nil {
+		return err
+	}
+
+	if err := app.BindConfig(&s.config); err != nil {
 		return err
 	}
 
@@ -41,6 +44,14 @@ func (s *TodoService) Migrate(app *bedrock.Application) error {
 }
 
 func (s *TodoService) Build(app *bedrock.Application) error {
+  if err := s.airbrake.Build(app); err != nil {
+    return err
+  }
+
+  if err := s.dbsvc.Build(app); err != nil {
+    return err
+  }
+
 	db, err := s.dbsvc.Db()
 	if err != nil {
 		return err
@@ -57,6 +68,7 @@ func (s *TodoService) Build(app *bedrock.Application) error {
 	r.PATCH("/todo/:id", todoResource.PatchTodo)
 	r.DELETE("/todo/:id", todoResource.DeleteTodo)
 	r.GET("/health", s.dbsvc.HealthHandler(app))
+  r.GET("/panic", s.airbrake.PanicHandler(app))
 
 	return nil
 }
