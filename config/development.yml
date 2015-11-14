@@ -1,5 +1,13 @@
 svchost: :8080
-dbuser: root
-dbpassword:
-dbhost: localhost
-dbname: todo
+db:
+  user: root
+  password:
+  host: localhost
+  database: go-service-basic
+airbrake:
+  projectid: 1234
+  projectkey: FIXME
+newrelic:
+  licensekey: FIXME
+  appname: go-service-basic
+  verbose: false

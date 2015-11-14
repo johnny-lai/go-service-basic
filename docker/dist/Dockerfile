@@ -5,13 +5,13 @@
 FROM scratch
 
 # Copy configuration
-COPY ./config/production.yml /opt/go-service-basic/production.yml
+COPY ./config/production.yml /opt/etc/go-service-basic.yml
 
 # Copy executables
 COPY ./tmp/dist/go-service-basic /go/bin/go-service-basic
 
 # Entrypoint
-ENTRYPOINT ["/go/bin/go-service-basic", "-c", "/opt/go-service-basic/production.yml"]
+ENTRYPOINT ["/go/bin/go-service-basic", "-c", "/opt/etc/go-service-basic.yml"]
 CMD ["server"]
 
 # Service listens on port 8080

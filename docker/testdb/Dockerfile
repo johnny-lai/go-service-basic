@@ -1,6 +1,6 @@
 FROM mysql:5.5
 
-ENV MYSQL_DATABASE todo
+ENV MYSQL_DATABASE go-service-basic
 
 ENV MYSQL_ROOT_PASSWORD whatever
 

@@ -1,31 +1,30 @@
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: {{.Env "PO_APP_NAME"}}
+  name: go-service-basic
   labels:
-    name: {{.Env "PO_APP_NAME"}}
-    app: {{.Env "APP_NAME"}}
+    name: go-service-basic
+    app: go-service-basic
 spec:
   replicas: 1
   selector:
-    name: {{.Env "PO_APP_NAME"}}
+    name: go-service-basic
   template:
     metadata:
       labels:
-        name: {{.Env "PO_APP_NAME"}}
+        name: go-service-basic
     spec:
+      imagePullPolicy: Always
       volumes:
       - name: db-secrets-volume
         secret:
-          secretName: {{.Env "SECRET_DB_NAME"}}
+          secretName: go-service-basic-db-secret
       containers:
       - name: app
-        image: {{.Env "PO_APP_IMAGE"}}
+        image: johnnylai/go-service-basic:{{.Env "COMMIT"}}
         env:
         - name: GIN_MODE
           value: debug
-        - name: DB_ENV_MYSQL_ROOT_PASSWORD
-          value: whatever
         volumeMounts:
         - name: db-secrets-volume
           mountPath: /etc/db-secrets

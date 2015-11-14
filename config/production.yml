@@ -1,9 +1,13 @@
 svchost: :8080
 db:
-  user: root
-  password: {{.Cat "/db/secrets"}}
+  user: {{.Cat "/etc/db-secrets/username"}}
+  password: {{.Cat "/etc/db-secrets/password"}}
   host: {{.Env "GO_SERVICE_BASIC_DB_PORT_3306_TCP_ADDR"}}
-  database: todo
+  database: go-service-basic
 airbrake:
   projectid: 1234
-  projectkey: test
+  projectkey: FIXME
+newrelic:
+  licensekey: FIXME
+  appname: go-service-basic
+  verbose: false
