@@ -1,8 +1,7 @@
-package test
+package itest
 
 import (
   "os"
-  "go-service-basic/core/model"
 	"testing"
 )
 
@@ -10,8 +9,8 @@ func host() string {
   return os.Getenv("TEST_HOST")
 }
 
-func TestGetTodos(t *testing.T) {
-  url := host() + "/todo"
+func TestHealth(t *testing.T) {
+  url := host() + "/health"
 
   r, err := makeRequest("GET", url, nil)
   if err != nil {
@@ -19,16 +18,15 @@ func TestGetTodos(t *testing.T) {
     return
   }
 
-  var respTodos []model.Todo
-  err = processResponseEntity(r, &respTodos, 200)
+  err = processResponse(r, 200)
   if err != nil {
     t.Fail()
     return
   }
 }
 
-func BenchmarkGetTodos(b *testing.B) {
-  url := host() + "/todo"
+func BenchmarkHealth(b *testing.B) {
+  url := host() + "/health"
 
   for n := 0; n < b.N; n++ {
     r, err := makeRequest("GET", url, nil)
@@ -37,8 +35,7 @@ func BenchmarkGetTodos(b *testing.B) {
       return
     }
 
-    var respTodos []model.Todo
-    err = processResponseEntity(r, &respTodos, 200)
+    err = processResponse(r, 200)
     if err != nil {
       b.Fail()
       return

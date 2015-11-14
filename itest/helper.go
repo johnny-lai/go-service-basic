@@ -1,4 +1,4 @@
-package test
+package itest
 
 import (
 	"bytes"

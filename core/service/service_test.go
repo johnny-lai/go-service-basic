@@ -12,10 +12,10 @@ import (
 	"testing"
 )
 
-var _ = Describe("TodoService", func() {
+var _ = Describe("Service", func() {
 	var (
 		app *bedrock.Application
-		svc TodoService
+		svc Service
 	)
 
 	BeforeEach(func() {
@@ -34,7 +34,7 @@ var _ = Describe("TodoService", func() {
 			log.Fatal(err)
 		}
 
-		svc = TodoService{}
+		svc = Service{}
 
 		if err := svc.Configure(app); err != nil {
 			log.Fatal(err)
@@ -45,9 +45,9 @@ var _ = Describe("TodoService", func() {
 		}
 	})
 
-	Describe("#GetAllTodos", func() {
+	Describe("#Health", func() {
 		It("should not raise an error", func() {
-			request, _ := http.NewRequest("GET", "/todo", nil)
+			request, _ := http.NewRequest("GET", "/health", nil)
 			response := httptest.NewRecorder()
 			app.Engine.ServeHTTP(response, request)
 			Expect(response.Code).To(Equal(http.StatusOK))
@@ -55,7 +55,7 @@ var _ = Describe("TodoService", func() {
 	})
 })
 
-func TestTodoService(t *testing.T) {
+func TestService(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "TodoService")
+	RunSpecs(t, "Service")
 }
