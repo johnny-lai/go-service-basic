@@ -5,9 +5,10 @@ db:
   host: {{.Env "GO_SERVICE_BASIC_DB_PORT_3306_TCP_ADDR"}}
   database: go-service-basic
 airbrake:
-  projectid: 1234
-  projectkey: FIXME
+  host: {{.Cat "/etc/secrets/airbrake/host"}}
+  projectid: {{.Cat "/etc/secrets/airbrake/projectid"}}
+  projectkey: {{.Cat "/etc/secrets/airbrake/projectkey"}}
 newrelic:
   licensekey: {{.Cat "/etc/secrets/newrelic/licensekey"}}
-  appname: go-service-basic.coupadev.com
-  verbose: true
+  appname: go-service-basic
+  verbose: false

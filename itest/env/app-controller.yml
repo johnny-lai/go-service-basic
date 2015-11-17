@@ -16,6 +16,9 @@ spec:
     spec:
       imagePullPolicy: Always
       volumes:
+      - name: airbrake-secrets-volume
+        secret:
+          secretName: go-service-basic-airbrake-secret
       - name: db-secrets-volume
         secret:
           secretName: go-service-basic-db-secret
@@ -29,6 +32,9 @@ spec:
         - name: GIN_MODE
           value: debug
         volumeMounts:
+        - name: airbrake-secrets-volume
+          mountPath: /etc/secrets/airbrake
+          readOnly: true
         - name: db-secrets-volume
           mountPath: /etc/secrets/db
           readOnly: true
