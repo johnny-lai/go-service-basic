@@ -19,6 +19,9 @@ spec:
       - name: db-secrets-volume
         secret:
           secretName: go-service-basic-db-secret
+      - name: newrelic-secrets-volume
+        secret:
+          secretName: go-service-basic-newrelic-secret
       containers:
       - name: app
         image: johnnylai/go-service-basic:{{.Env "COMMIT"}}
@@ -27,7 +30,10 @@ spec:
           value: debug
         volumeMounts:
         - name: db-secrets-volume
-          mountPath: /etc/db-secrets
+          mountPath: /etc/secrets/db
+          readOnly: true
+        - name: newrelic-secrets-volume
+          mountPath: /etc/secrets/newrelic
           readOnly: true
         ports:
         - containerPort: 8080
