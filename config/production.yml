@@ -9,5 +9,5 @@ airbrake:
   projectkey: FIXME
 newrelic:
   licensekey: {{.Cat "/etc/secrets/newrelic/licensekey"}}
-  appname: go-service-basic
-  verbose: false
+  appname: go-service-basic.coupadev.com
+  verbose: true

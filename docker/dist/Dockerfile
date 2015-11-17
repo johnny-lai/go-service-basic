@@ -2,7 +2,11 @@
 
 # Start from a Debian image with the latest version of Go installed
 # and a workspace (GOPATH) configured at /go.
-FROM debian:jessie
+FROM alpine:3.1
+
+# Add additional packages:
+# * CA Certificates for New Relic
+RUN apk add --update ca-certificates && rm -rf /var/cache/apk/*
 
 # Copy configuration
 COPY ./config/production.yml /opt/etc/go-service-basic.yml
