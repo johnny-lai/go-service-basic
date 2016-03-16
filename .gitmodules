@@ -1,3 +1,3 @@
-[submodule "vendor/github.com/johnny-lai/bedrock"]
-	path = vendor/github.com/johnny-lai/bedrock
-	url = git@github.com:/johnny-lai/bedrock
+[submodule "vendor/github.com/johnny-lai/baker"]
+	path = vendor/github.com/johnny-lai/baker
+	url = git@github.com:johnny-lai/baker.git
